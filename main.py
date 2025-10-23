@@ -1,22 +1,25 @@
-from load_wav import load_wav_as_array
-from plot_spectogram import plot_spectogram
 import os
+import numpy as np
+from plot_spectogram import plot_spectogram
 
-input_folder = r"C:\Users\Gabriel\Documents\5. Semester\Machine_Lerning\Project\train_cut\engine1_good"
-output_folder = r"C:\Users\Gabriel\Documents\5. Semester\Machine_Lerning\Project\spectograms"
+input_folder = r"C:\Users\Gabriel\Documents\5. Semester\Machine_Lerning\Project\test_cut\engine3_heavyload"
+output_folder = r"C:\Users\Gabriel\Documents\5. Semester\Machine_Lerning\Project\dataset\test\spectrograms_heavyload"
+
+os.makedirs(output_folder, exist_ok=True)
 
 for file_name in os.listdir(input_folder):
+    if not file_name.endswith(".wav"):
+        continue
+
     file_path = os.path.join(input_folder, file_name)
+    print("Processing:", file_path)
 
+    Sxx_log, f, t, sr = plot_spectogram(file_path, save_image=True,
+                                            save_path=os.path.join(output_folder, f"{os.path.splitext(file_name)[0]}.png"))
 
-    waveform, sr = load_wav_as_array(file_path)
-    print("Loaded waveform:", waveform.shape, "Sample rate:", sr)
+    # Save data as numpy array
+    np.save(os.path.join(output_folder, f"{os.path.splitext(file_name)[0]}.npy"), Sxx_log)
 
-    # Generate output path for the spectrogram
-    output_file = os.path.join(output_folder, f"{os.path.splitext(file_name)[0]}.png")
-        
-    # Plot and save spectrogram
-    plot_spectogram(file_path, save_path=output_file)
-    print(f"Saved spectrogram for {file_name} to {output_file}")
+    print(f"Saved: {file_name}")
 
 
