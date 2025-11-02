@@ -1,0 +1,31 @@
+{
+  "mode": "train_cut vs test_cut",
+  "roots_train": [
+    "data/IDMT-ISA-ELECTRIC-ENGINE/train_cut"
+  ],
+  "roots_test": [
+    "data/IDMT-ISA-ELECTRIC-ENGINE/test_cut"
+  ],
+  "target_sr": 22050,
+  "duration_s": 4.0,
+  "n_mfcc": 40,
+  "hop_length": 512,
+  "n_fft": 2048,
+  "label_map": {
+    "good": 0,
+    "broken": 1,
+    "heavyload": 2
+  },
+  "display_labels": {
+    "0": "engine1_good",
+    "1": "engine2_broken",
+    "2": "engine3_heavyload"
+  },
+  "class_weights": {
+    "0": 1.0,
+    "1": 1.2,
+    "2": 3.0
+  },
+  "alpha_tilt": 1.2,
+  "best_model": "RF"
+}
