@@ -38,7 +38,7 @@ ALPHA   = 1.2
 
 
 def collect_items(roots):
-    """Finn .wav-filer og avled label fra fil-/mappenavn."""
+
     items = []
     for root in roots:
         for w in glob.glob(str(Path(root) / "**" / "*.wav"), recursive=True):
@@ -55,7 +55,7 @@ def collect_items(roots):
 
 
 def load_audio_fixed(path, sr=TARGET_SR, duration_s=DURATION_S):
-    """Mono, resample og klipp/pad til fast lengde."""
+    
     y, file_sr = sf.read(path, always_2d=False)
     y = y.astype(np.float32)
     if y.ndim > 1:
@@ -71,7 +71,7 @@ def load_audio_fixed(path, sr=TARGET_SR, duration_s=DURATION_S):
 
 
 def mfcc_feature_vector(y, sr):
-    """MFCC + deltas, CMVN pr. fil, robuste tids-statistikker."""
+    
     mfcc = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=N_MFCC,
                                 hop_length=HOP_LENGTH, n_fft=N_FFT)
     mfcc = (mfcc - np.mean(mfcc, axis=1, keepdims=True)) / (np.std(mfcc, axis=1, keepdims=True) + 1e-8)
@@ -87,7 +87,7 @@ def mfcc_feature_vector(y, sr):
 
 
 def extra_spectral(y, sr):
-    """Centroid, rolloff, bandwidth, ZCR, RMS (mean/std/median)."""
+    
     S = np.abs(librosa.stft(y, n_fft=N_FFT, hop_length=HOP_LENGTH))**2
     centroid  = librosa.feature.spectral_centroid(S=S, sr=sr)
     rolloff   = librosa.feature.spectral_rolloff(S=S, sr=sr)
@@ -102,7 +102,7 @@ def extra_spectral(y, sr):
 
 
 def build_features(items):
-    """Ekstraher feature-vektor pr. fil."""
+
     X_rows, y_rows = [], []
     for path, lbl in items:
         try:
@@ -115,7 +115,7 @@ def build_features(items):
 
 
 def plot_confusion_norsk(cm, classes, normalize=False, save_path=None):
-    """Norsk konfusjonsmatrise — samme stil som før (lilla/gul)."""
+
     if normalize:
         cm = cm.astype(float) / (cm.sum(axis=1, keepdims=True) + 1e-12)
 
