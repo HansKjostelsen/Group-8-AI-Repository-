@@ -16,7 +16,7 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# -------------------- KONFIG --------------------
+
 
 # Bytt disse to linjene hvis for å kjøre train_cut og test_cut
 ROOTS_TRAIN = ["data/IDMT-ISA-ELECTRIC-ENGINE/train_cut"]
@@ -31,11 +31,11 @@ N_FFT      = 2048
 LABEL_MAP = {"good": 0, "broken": 1, "heavyload": 2}
 INV_LABEL_MAP = {v: k for k, v in LABEL_MAP.items()}
 
-# Vekt og “tilt” (favoriser heavyload litt når sannsynligheten er nær good)
+
 WEIGHTS = {LABEL_MAP["good"]: 1.0, LABEL_MAP["broken"]: 1.2, LABEL_MAP["heavyload"]: 3.0}
 ALPHA   = 1.2
 
-# -------------------- HJELPERE --------------------
+
 
 def collect_items(roots):
     """Finn .wav-filer og avled label fra fil-/mappenavn."""
@@ -141,7 +141,7 @@ def plot_confusion_norsk(cm, classes, normalize=False, save_path=None):
     plt.show()
 
 
-# --- “Safe” validering: hopper over split hvis for få prøver/klasser
+
 from collections import Counter
 def safe_val_split(X, y, test_size=0.15, random_state=42):
     counts = Counter(y)
@@ -151,10 +151,10 @@ def safe_val_split(X, y, test_size=0.15, random_state=42):
     return train_test_split(X, y, test_size=test_size, stratify=y, random_state=random_state)
 
 
-# -------------------- HOVEDPROGRAM --------------------
+
 
 if __name__ == "__main__":
-    # 1) Finn filer
+    
     train_items = collect_items(ROOTS_TRAIN)
     test_items  = collect_items(ROOTS_TEST)
 
@@ -165,21 +165,21 @@ if __name__ == "__main__":
     print("Test  class dist:",
           {INV_LABEL_MAP[k]: v for k, v in Counter([l for _, l in test_items]).items()})
 
-    # 2) Features
+    
     print("Henter ut trekk (train)…")
     X_train, y_train = build_features(train_items)
     print("Henter ut trekk (test)…")
     X_test,  y_test  = build_features(test_items)
 
-    # 3) Skalering
+    
     scaler = StandardScaler()
     X_train_s = scaler.fit_transform(X_train)
     X_test_s  = scaler.transform(X_test)
 
-    # 4) Sikker validerings-splitt (hopper over hvis for lite)
+    
     X_tr, X_val, y_tr, y_val = safe_val_split(X_train_s, y_train)
 
-    # 5) Modeller
+    
     rf  = RandomForestClassifier(
         n_estimators=900, max_features="sqrt", min_samples_leaf=2,
         random_state=42, class_weight=WEIGHTS
@@ -187,7 +187,7 @@ if __name__ == "__main__":
     svm = SVC(kernel="rbf", C=6, gamma="scale",
               class_weight=WEIGHTS, probability=True)
 
-    # 6) Modellvalg
+    
     if X_tr is X_val:
         print("⚠️  Skipper modellvalg (for lite datasett) → bruker Random Forest.")
         best_name, best_model, best_f1 = "RF", rf, None
@@ -202,11 +202,11 @@ if __name__ == "__main__":
                 best_name, best_model, best_f1 = name, m, f1
         print(f"→ Bruker {best_name} (val macro-F1={best_f1:.3f})")
 
-    # 7) Tren på hele train-settet og evaluer på test
+    
     best_model.fit(X_train_s, y_train)
     base_pred = best_model.predict(X_test_s)
 
-    # 8) Valgfri “tilt” mot heavyload ved proba
+    
     if hasattr(best_model, "predict_proba"):
         proba = best_model.predict_proba(X_test_s)
         idx_good, idx_hl = LABEL_MAP["good"], LABEL_MAP["heavyload"]
@@ -217,7 +217,7 @@ if __name__ == "__main__":
     else:
         y_pred = base_pred
 
-    # 9) Rapport + figur
+    
     target_names = [INV_LABEL_MAP[i] for i in sorted(LABEL_MAP.values())]
     print("\nKlassifikasjonsrapport:")
     print(classification_report(y_test, y_pred, target_names=target_names, zero_division=0))
