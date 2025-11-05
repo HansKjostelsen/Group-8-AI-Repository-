@@ -1,0 +1,13 @@
+SVM - Test Accuracy: 89.06%
+ 
+Classification Report:
+ 
+              precision    recall  f1-score   support
+ 
+           0       1.00      0.93      0.96       669
+           1       1.00      0.74      0.85       665
+           2       0.76      1.00      0.86       687
+ 
+    accuracy                           0.89      2021
+   macro avg       0.92      0.89      0.89      2021
+weighted avg       0.92      0.89      0.89      2021

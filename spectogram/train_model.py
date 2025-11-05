@@ -83,9 +83,8 @@ def train_svm(X_train, y_train, kernel="rbf", C=1.0):
     return clf
 
 
-# -----------------------------
 # Evaluation
-# -----------------------------
+
 def evaluate_model(clf, X_test, y_test, model_name="Model"):
     y_pred = clf.predict(X_test)
     acc = accuracy_score(y_test, y_pred)
@@ -112,9 +111,9 @@ def evaluate_model(clf, X_test, y_test, model_name="Model"):
         plt.show()
 
 
-# -----------------------------
+
 # Main Pipeline
-# -----------------------------
+
 def build_and_train_model(train_folder, test_folder, model_type="random_forest"):
     X_train, X_test, y_train, y_test = prepare_data(train_folder, test_folder)
 
@@ -137,9 +136,9 @@ def build_and_train_model(train_folder, test_folder, model_type="random_forest")
     return clf
 
 
-# -----------------------------
+
 # Run script
-# -----------------------------
+
 if __name__ == "__main__":
     train_folder = r"C:\Users\Gabriel\Documents\5. Semester\Machine_Lerning\Project\dataset\train"
     test_folder = r"C:\Users\Gabriel\Documents\5. Semester\Machine_Lerning\Project\dataset\test"

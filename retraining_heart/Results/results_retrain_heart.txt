@@ -1,0 +1,26 @@
+Test Accuracy: 0.6397
+Classification Report:
+              precision    recall  f1-score   support
+
+         0.0       0.18      0.30      0.22       104
+         1.0       0.83      0.71      0.77       490
+
+    accuracy                           0.64       594
+   macro avg       0.50      0.51      0.49       594
+weighted avg       0.71      0.64      0.67       594
+
+Mean 5-Fold CV Accuracy: 0.7358
+SVM Validation Accuracy (Overfitting Check): 0.6951
+
+===== Random Forest Evaluation =====
+Test Accuracy: 0.2374
+Classification Report:
+              precision    recall  f1-score   support
+
+         0.0       0.18      0.91      0.30       104
+         1.0       0.84      0.09      0.17       490
+
+    accuracy                           0.24       594
+   macro avg       0.51      0.50      0.23       594
+weighted avg       0.72      0.24      0.19       594
+
